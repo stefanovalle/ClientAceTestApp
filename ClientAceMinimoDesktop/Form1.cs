@@ -33,7 +33,7 @@ namespace ClientAceMinimoDesktop
                     if (itemValue.ResultID.Succeeded)
                     {
                         
-                        realtime.Text += itemValue.TimeStamp + "  " + itemValue.Value + Environment.NewLine;
+                        realtime.Text += itemValue.TimeStamp + ": " + itemValue.ClientHandle + " - " + itemValue.Value + Environment.NewLine;
                         realtime.SelectionStart = realtime.TextLength;
                         realtime.ScrollToCaret();
                     }
@@ -79,16 +79,20 @@ namespace ClientAceMinimoDesktop
             }
 
             AggiornaDati();
-            
-            // Tag a cui mi voglio sottoscrivere
-            ItemIdentifier[] itemIdentifiers = new ItemIdentifier[2];
-            itemIdentifiers[0] = new ItemIdentifier();
-            itemIdentifiers[0].ItemName = "Channel1.Device1.Tag2";
-            itemIdentifiers[0].ClientHandle = 1; // Assign uniquehandle
 
-            itemIdentifiers[1] = new ItemIdentifier();
-            itemIdentifiers[1].ItemName = "Simulation Examples.Functions.Ramp1";
-            itemIdentifiers[1].ClientHandle = 2; // Assign uniquehandle
+            // Tag a cui mi voglio sottoscrivere
+            ItemIdentifier[] items = new ItemIdentifier[2];
+            items[0] = new ItemIdentifier
+            {
+                ItemName = "its-iot-device.Device1.PlantStatus",
+                ClientHandle = "PlantStatus"
+            };
+            items[1] = new ItemIdentifier
+            {
+                ItemName = "Simulation Examples.Functions.Ramp1",
+                ClientHandle = "Ramp1"
+            };
+
             int serverSubscription;
             ReturnCode returnCode;
             
@@ -107,7 +111,7 @@ namespace ClientAceMinimoDesktop
                 updateRate,
                 out revisedUpdateRate,
                 deadband,
-                ref itemIdentifiers,
+                ref items,
                 out serverSubscription);
             }
             catch (Exception ex)
@@ -126,7 +130,7 @@ namespace ClientAceMinimoDesktop
             Kepware.ClientAce.OpcDaClient.ItemValue[] OPCItemValues = null;
 
             OPCItems[0] = new Kepware.ClientAce.OpcDaClient.ItemIdentifier();
-            OPCItems[0].ItemName = "Channel1.Device1.Tag2";
+            OPCItems[0].ItemName = "its-iot-device.Device1.PlantStatus";
             OPCItems[0].ClientHandle = 1;
 
             OPCItems[1] = new Kepware.ClientAce.OpcDaClient.ItemIdentifier();
